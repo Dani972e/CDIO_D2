@@ -1,4 +1,4 @@
-# CDIO-D1 (Group 11)
+# CDIO-D2 (Group 11)
 
 This project is created in cooperation with 02324 Advanced Programming at DTU.
 
