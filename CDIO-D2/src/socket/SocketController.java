@@ -14,7 +14,7 @@ import socket.SocketInMessage.SocketMessageType;
 
 public class SocketController implements ISocketController {
 	Set<ISocketObserver> observers = new HashSet<ISocketObserver>();
-	// TODO Maybe add some way to keep track of multiple connections?
+	// TODO Maybe add some way to keep track of multiple connections? dcddsfsfsdfds
 	private int connectionCount = 0;
 	
 	private BufferedReader inStream;
