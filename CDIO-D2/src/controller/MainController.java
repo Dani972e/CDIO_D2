@@ -41,7 +41,6 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			new Thread(socketHandler).start();
 			// TODO set up weightController - Look above for inspiration (Keep
 			// it simple ;))
-			// TODO is done.
 			new Thread(weightController).start();
 		} else {
 			System.err.println("No controllers injected!");
