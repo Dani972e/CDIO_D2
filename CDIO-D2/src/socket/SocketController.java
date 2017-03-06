@@ -39,7 +39,7 @@ public class SocketController implements ISocketController {
 			outWriter.flush();
 			//////////////////////////////////////////////////
 		} else {
-			// TODO maybe tell someone that connection is closed?
+			observers.notify(); // is dis true?
 		}
 	}
 
@@ -78,7 +78,8 @@ public class SocketController implements ISocketController {
 								// wait for response
 					// TODO implement logic for RM command
 					break;
-				case "D":// Display a message in the primary display
+				case "D":
+					// Display a message in the primary display
 					// TODO Refactor to make sure that faulty messages doesn't
 					// break the system
 					notifyObservers(new SocketInMessage(SocketMessageType.D, inLine.split(" ")[1]));

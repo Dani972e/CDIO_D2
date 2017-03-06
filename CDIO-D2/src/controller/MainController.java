@@ -39,8 +39,9 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			socketHandler.registerObserver(this);
 			// Starts socketHandler in own thread
 			new Thread(socketHandler).start();
-			// TODO set up weightController - Look above for inspiration (Keep
-			// it simple ;))
+			// Makes this controller interested in messages from the socket
+			weightController.registerObserver(this);
+			// Starts weightController in own thread
 			new Thread(weightController).start();
 		} else {
 			System.err.println("No controllers injected!");
@@ -52,26 +53,49 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 	public void notify(SocketInMessage message) {
 		switch (message.getType()) {
 		case B:
+			// Sætter brutto på vægt simulator til det givne antal kg.
+			// eks. B 1.234 crlf
+			// weightController.showMessagePrimaryDisplay(message.getMessage());
 			break;
 		case D:
+			// Max 7 characters is showed onto the display. Virker. (håber vi) Skriver vægt i display.
 			weightController.showMessagePrimaryDisplay(message.getMessage());
 			break;
 		case Q:
+			// Programmet skal afsluttes.
+			System.exit(0);
 			break;
 		case RM204:
+			
+			
 			break;
 		case RM208:
+			// Skriv i displayet og aftent indtastning.
+			// Vægten viser en besked til brugeren og afventer brugerens input.
+			// Der sendes en bekræftelse. Når brugerens input er afsluttet sendes dette. 
+			// NB. Der er 2 svar fra vægten.
+			
 			break;
 		case S:
+			// Send stabil afvejning.
 			break;
 		case T:
-			break;
+			// Vægt tarares.
+			
+			break; 
 		case DW:
+			// Vægtens display ryddes og vægten svarer med en bekræftelse.
+			
 			break;
 		case K:
+			// K skifter vægtens knap tilstand. Når der trykkes på funktionstaster (tara, zero, [->, send)
+			// afhænger resultatet af vægtens tilstand.
+			// 
 			handleKMessage(message);
 			break;
 		case P111:
+			// Skriver max 30 tegn i sekundært display.
+			//weightController.showMessageSecondaryDisplay(message.getMessage());
 			break;
 		}
 
@@ -101,6 +125,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 	@Override
 	public void notifyKeyPress(KeyPress keyPress) {
 		// TODO implement logic for handling input from ui
+		System.out.println("Tastet: " + keyPress.getCharacter());
 		switch (keyPress.getType()) {
 		case SOFTBUTTON:
 			break;
@@ -113,6 +138,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 		case C:
 			break;
 		case EXIT:
+			System.exit(0);
 			break;
 		case SEND:
 			if (keyState.equals(KeyState.K4) || keyState.equals(KeyState.K3)) {
