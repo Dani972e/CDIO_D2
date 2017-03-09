@@ -16,7 +16,7 @@ public class SocketController implements ISocketController {
 	Set<ISocketObserver> observers = new HashSet<ISocketObserver>();
 	// TODO Maybe add some way to keep track of multiple connections? dcddsfsfsdfds
 	private int connectionCount = 0;
-	
+
 	private BufferedReader inStream;
 	private DataOutputStream outStream;
 
@@ -71,30 +71,38 @@ public class SocketController implements ISocketController {
 			while (true) {
 				inLine = inStream.readLine();
 				System.out.println(inLine);
-				if (inLine == null)
-					break;
+				if (inLine == null) break;
 				switch (inLine.split(" ")[0]) {
 				case "RM20": // Display a message in the secondary display and
-								// wait for response
-					// TODO implement logic for RM command
+									// wait for response
+								// TODO implement logic for RM command
+					notifyObservers(new SocketInMessage(SocketMessageType.RM204, inLine.split(" ")[1]));
 					break;
 				case "D":
 					// Display a message in the primary display
 					// TODO Refactor to make sure that faulty messages doesn't
 					// break the system
-					notifyObservers(new SocketInMessage(SocketMessageType.D, inLine.split(" ")[1]));
+					if (inLine.split(" ").length > 1) {
+						notifyObservers(new SocketInMessage(SocketMessageType.D, inLine.split(" ")[1]));
+					}
 					break;
 				case "DW": // Clear primary display
 					// TODO implement
+					notifyObservers(new SocketInMessage(SocketMessageType.DW, ""));
 					break;
 				case "P111": // Show something in secondary display
-					// TODO implement
+					// TODO implement totally ducked
+					if (inLine.length() <= 41) { // uhm so ok 41 works but we have no fucking clue why
+						notifyObservers(
+								new SocketInMessage(SocketMessageType.P111, inLine.substring(4, inLine.length() - 1)));
+					}
+					// hvordan skal vi sende en god besked tilbage??
 					break;
 				case "T": // Tare the weight
-					// TODO implement
+								// TODO implement
 					break;
 				case "S": // Request the current load
-					// TODO implement
+								// TODO implement
 					break;
 				case "K":
 					if (inLine.split(" ").length > 1) {
@@ -103,9 +111,12 @@ public class SocketController implements ISocketController {
 					break;
 				case "B": // Set the load
 					// TODO implement
+					if (inLine.split(" ").length > 1) {
+						notifyObservers(new SocketInMessage(SocketMessageType.B, inLine.split(" ")[1]));
+					}
 					break;
 				case "Q": // Quit
-					// TODO implement
+					notifyObservers(new SocketInMessage(SocketMessageType.Q, ""));
 					break;
 				default: // Something went wrong?
 					// TODO implement
@@ -113,7 +124,7 @@ public class SocketController implements ISocketController {
 				}
 			}
 		} catch (IOException e) {
-			// TODO maybe notify mainController?
+			observers.notify();
 			e.printStackTrace();
 		}
 	}

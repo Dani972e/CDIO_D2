@@ -56,6 +56,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			// Sætter brutto på vægt simulator til det givne antal kg.
 			// eks. B 1.234 crlf
 			// weightController.showMessagePrimaryDisplay(message.getMessage());
+			weightController.showMessagePrimaryDisplay(message.getMessage());
 			break;
 		case D:
 			// Max 7 characters is showed onto the display. Virker. (håber vi) Skriver vægt i display.
@@ -66,8 +67,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			System.exit(0);
 			break;
 		case RM204:
-			
-			
+			weightController.showMessageSecondaryDisplay(message.getMessage());
 			break;
 		case RM208:
 			// Skriv i displayet og aftent indtastning.
@@ -78,6 +78,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			break;
 		case S:
 			// Send stabil afvejning.
+			
 			break;
 		case T:
 			// Vægt tarares.
@@ -85,7 +86,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			break; 
 		case DW:
 			// Vægtens display ryddes og vægten svarer med en bekræftelse.
-			
+			weightController.showMessagePrimaryDisplay("");
 			break;
 		case K:
 			// K skifter vægtens knap tilstand. Når der trykkes på funktionstaster (tara, zero, [->, send)
@@ -96,6 +97,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 		case P111:
 			// Skriver max 30 tegn i sekundært display.
 			//weightController.showMessageSecondaryDisplay(message.getMessage());
+			weightController.showMessageSecondaryDisplay(message.getMessage());
 			break;
 		}
 
@@ -136,7 +138,6 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 		case ZERO:
 			break;
 		case C:
-			
 			break;
 		case EXIT:
 			System.exit(0);
