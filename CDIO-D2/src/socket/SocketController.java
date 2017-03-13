@@ -104,13 +104,19 @@ public class SocketController implements ISocketController {
 						notifyObservers(
 								new SocketInMessage(SocketMessageType.P111, inLine.substring(4, inLine.length() - 1)));
 					}
-					// hvordan skal vi sende en god beske
+					// hvordan skal vi sende en god besked
 					break;
 				case "T": // Tare the weight
 								// TODO implement
+					if (inLine.split(" ").length > 1) {
+						notifyObservers(new SocketInMessage(SocketMessageType.T, inLine.split(" ")[1]));
+					}
 					break;
 				case "S": // Request the current load
 								// TODO implement
+					if (inLine.split(" ").length > 1) {
+						notifyObservers(new SocketInMessage(SocketMessageType.S, inLine.split(" ")[1]));
+					}
 					break;
 				case "K":
 					if (inLine.split(" ").length > 1) {
