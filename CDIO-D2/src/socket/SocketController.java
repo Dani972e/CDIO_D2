@@ -74,8 +74,8 @@ public class SocketController implements ISocketController {
 				if (inLine == null) break;
 				switch (inLine.split(" ")[0]) {
 				case "RM20": // Display a message in the secondary display and
-									// wait for response
-								// TODO implement logic for RM command
+							 // wait for response
+							 // TODO implement logic for RM command
 					notifyObservers(new SocketInMessage(SocketMessageType.RM204, inLine.split(" ")[1]));
 					break;
 				case "D":
@@ -87,22 +87,22 @@ public class SocketController implements ISocketController {
 					}
 					break;
 				case "DW": // Clear primary display
-					// TODO implement
+						   // TODO implement
 					notifyObservers(new SocketInMessage(SocketMessageType.DW, ""));
 					break;
 				case "P111": // Show something in secondary display
-					// TODO implement totally ducked
-					if (inLine.length() <= 41) { // uhm so ok 41 works but we have no fucking clue why
+							 // TODO implement
+					if (inLine.length() <= 41) {
 						notifyObservers(
 								new SocketInMessage(SocketMessageType.P111, inLine.substring(4, inLine.length() - 1)));
 					}
-					// hvordan skal vi sende en god besked tilbage??
+					// hvordan skal vi sende en god beske
 					break;
 				case "T": // Tare the weight
-								// TODO implement
+						  // TODO implement
 					break;
 				case "S": // Request the current load
-								// TODO implement
+						  // TODO implement
 					break;
 				case "K":
 					if (inLine.split(" ").length > 1) {
@@ -118,7 +118,8 @@ public class SocketController implements ISocketController {
 				case "Q": // Quit
 					notifyObservers(new SocketInMessage(SocketMessageType.Q, ""));
 					break;
-				default: // Something went wrong?
+				default: 
+					// Something went wrong?
 					// TODO implement
 					break;
 				}
