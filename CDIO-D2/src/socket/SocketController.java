@@ -74,8 +74,16 @@ public class SocketController implements ISocketController {
 				if (inLine == null) break;
 				switch (inLine.split(" ")[0]) {
 				case "RM20": // Display a message in the secondary display and
-							 // wait for response
-							 // TODO implement logic for RM command
+									// wait for response
+								// TODO implement logic for RM command
+					switch (inLine.split(" ")[1]) {
+					case "4":
+						break;
+					case "8":
+						break;
+					default:
+						break;
+					}
 					notifyObservers(new SocketInMessage(SocketMessageType.RM204, inLine.split(" ")[1]));
 					break;
 				case "D":
@@ -87,11 +95,11 @@ public class SocketController implements ISocketController {
 					}
 					break;
 				case "DW": // Clear primary display
-						   // TODO implement
+								// TODO implement
 					notifyObservers(new SocketInMessage(SocketMessageType.DW, ""));
 					break;
 				case "P111": // Show something in secondary display
-							 // TODO implement
+									// TODO implement
 					if (inLine.length() <= 41) {
 						notifyObservers(
 								new SocketInMessage(SocketMessageType.P111, inLine.substring(4, inLine.length() - 1)));
@@ -99,10 +107,10 @@ public class SocketController implements ISocketController {
 					// hvordan skal vi sende en god beske
 					break;
 				case "T": // Tare the weight
-						  // TODO implement
+								// TODO implement
 					break;
 				case "S": // Request the current load
-						  // TODO implement
+								// TODO implement
 					break;
 				case "K":
 					if (inLine.split(" ").length > 1) {
@@ -118,7 +126,7 @@ public class SocketController implements ISocketController {
 				case "Q": // Quit
 					notifyObservers(new SocketInMessage(SocketMessageType.Q, ""));
 					break;
-				default: 
+				default:
 					// Something went wrong?
 					// TODO implement
 					break;
