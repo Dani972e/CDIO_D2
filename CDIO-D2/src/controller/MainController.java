@@ -75,6 +75,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			// Der sendes en bekræftelse. Når brugerens input er afsluttet sendes dette. 
 			// NB. Der er 2 svar fra vægten.
 			weightController.showMessagePrimaryDisplay("Afventer indtastning..");
+			socketHandler.sendMessage(new SocketOutMessage("send"));
 			
 			
 			break;

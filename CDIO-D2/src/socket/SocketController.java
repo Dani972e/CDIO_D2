@@ -78,13 +78,17 @@ public class SocketController implements ISocketController {
 								// TODO implement logic for RM command
 					switch (inLine.split(" ")[1]) {
 					case "4":
+						notifyObservers(new SocketInMessage(SocketMessageType.RM204, inLine.split(" ")[1]));
+						System.out.println("RM20 4 komando");
 						break;
 					case "8":
+						notifyObservers(new SocketInMessage(SocketMessageType.RM208, inLine.split(" ")[1]));
+						System.out.println("RM20 8 komando");
 						break;
 					default:
 						break;
 					}
-					notifyObservers(new SocketInMessage(SocketMessageType.RM204, inLine.split(" ")[1]));
+					
 					break;
 				case "D":
 					// Display a message in the primary display
