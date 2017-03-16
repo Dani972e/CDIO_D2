@@ -23,6 +23,8 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 	private IWeightInterfaceController weightController;
 	private KeyState keyState = KeyState.K1;
 	private double brutto, tara;
+	private String charsPressed = "";
+	private SocketInMessage.SocketMessageType currentKeyState;
 
 	public MainController(ISocketController socketHandler, IWeightInterfaceController weightInterfaceController) {
 		this.init(socketHandler, weightInterfaceController);
@@ -57,11 +59,12 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 		case B:
 			// Sætter brutto på vægt simulator til det givne antal kg.
 			// eks. B 1.234 crlf
-			notifyWeightChange(FloatingDecimal.parseDouble(message.getMessage().substring(2)));	
+			notifyWeightChange(FloatingDecimal.parseDouble(message.getMessage() + "kg"));
 			break;
 		case D:
 			// Max 7 characters is showed onto the display. Virker. (håber vi) Skriver vægt i display.
-			weightController.showMessagePrimaryDisplay(message.getMessage().substring(0, message.getMessage().length()));
+			weightController
+					.showMessagePrimaryDisplay(message.getMessage().substring(0, message.getMessage().length()));
 			break;
 		case Q:
 			// Programmet skal afsluttes.
@@ -76,7 +79,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			// Der sendes en bekræftelse. Når brugerens input er afsluttet
 			// sendes dette.
 			// NB. Der er 2 svar fra vægten.
-			weightController.showMessagePrimaryDisplay("Afventer indtastning..");
+
 			break;
 		case S:
 			// Send stabil afvejning.
@@ -105,10 +108,13 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			break;
 		case P111:
 			// Skriver max 30 tegn i sekundært display.
-			weightController.showMessageSecondaryDisplay(message.getMessage());
+			String P111text = message.getMessage().substring(2, message.getMessage().length());
+			if (P111text.length() > 30) P111text = P111text.substring(0, 30);
+			weightController.showMessageSecondaryDisplay(P111text);
+			socketHandler.sendMessage(new SocketOutMessage("P111 A"));
 			break;
 		}
-
+		// RM204/8
 	}
 
 	private void handleKMessage(SocketInMessage message) {
@@ -140,12 +146,24 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 		case SOFTBUTTON:
 			break;
 		case TARA:
+			this.tara = this.brutto;
+			this.brutto = 0;
+			weightController.showMessagePrimaryDisplay("0.000kg");
+			socketHandler.sendMessage(new SocketOutMessage("T S      " + this.tara + " kg"));
 			break;
 		case TEXT:
+			charsPressed += keyPress.getCharacter();
+			weightController.showMessagePrimaryDisplay(charsPressed + "kg");
 			break;
 		case ZERO:
+			this.tara = 0;
+			this.brutto = 0;
+			charsPressed = "";
+			weightController.showMessagePrimaryDisplay(brutto + "kg");
 			break;
 		case C:
+			charsPressed = "";
+			weightController.showMessagePrimaryDisplay(charsPressed + "kg");
 			break;
 		case EXIT:
 			System.exit(0);
@@ -154,6 +172,11 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			if (keyState.equals(KeyState.K4) || keyState.equals(KeyState.K3)) {
 				socketHandler.sendMessage(new SocketOutMessage("K A 3"));
 			}
+			if (currentKeyState == SocketInMessage.SocketMessageType.RM208) {
+				socketHandler.sendMessage(new SocketOutMessage("RM20 A " + charsPressed));
+			}
+			currentKeyState = null;
+			charsPressed = "";
 			break;
 		}
 
@@ -161,9 +184,8 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 
 	@Override
 	public void notifyWeightChange(double newWeight) {
-		// HOLD STYR PÅ BRUTTO BELASTNING
-		weightController.showMessagePrimaryDisplay("" + newWeight);
 		this.brutto = newWeight;
+		weightController.showMessagePrimaryDisplay("" + (this.brutto - this.tara));
 	}
 
 }

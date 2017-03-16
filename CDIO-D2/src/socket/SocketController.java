@@ -88,7 +88,7 @@ public class SocketController implements ISocketController {
 					default:
 						break;
 					}
-					
+
 					break;
 				case "D":
 					// Display a message in the primary display
@@ -111,16 +111,12 @@ public class SocketController implements ISocketController {
 					// hvordan skal vi sende en god besked
 					break;
 				case "T": // Tare the weight
-						 // TODO implement
-					if (inLine.split(" ").length > 1) {
-						notifyObservers(new SocketInMessage(SocketMessageType.T, inLine.split(" ")[1]));
-					}
+						  // TODO implement
+					notifyObservers(new SocketInMessage(SocketMessageType.T, inLine));
 					break;
 				case "S": // Request the current load
-						  // TODO implement
-					if (inLine.split(" ").length > 1) {
-						notifyObservers(new SocketInMessage(SocketMessageType.S, inLine.split(" ")[1]));
-					}
+								// TODO implement
+					notifyObservers(new SocketInMessage(SocketMessageType.S, ""));
 					break;
 				case "K":
 					if (inLine.split(" ").length > 1) {
@@ -134,6 +130,7 @@ public class SocketController implements ISocketController {
 					}
 					break;
 				case "Q": // Quit
+					activeSocket.close();
 					notifyObservers(new SocketInMessage(SocketMessageType.Q, ""));
 					break;
 				default:
