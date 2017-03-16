@@ -12,6 +12,7 @@ import weight.gui.WeightInterfaceControllerGUI;
  *
  */
 public class Main {
+	@SuppressWarnings("unused")
 	private static boolean gui = true;
 
 	public static void main(String[] args) {

@@ -35,7 +35,7 @@ public class SocketController implements ISocketController {
 		if (outStream != null) {
 			// TODO send something over the socket! //////////
 			PrintWriter outWriter = new PrintWriter(outStream);
-			outWriter.println(message);
+			outWriter.println(message.getMessage());
 			outWriter.flush();
 			//////////////////////////////////////////////////
 		} else {
@@ -111,13 +111,13 @@ public class SocketController implements ISocketController {
 					// hvordan skal vi sende en god besked
 					break;
 				case "T": // Tare the weight
-								// TODO implement
+						 // TODO implement
 					if (inLine.split(" ").length > 1) {
 						notifyObservers(new SocketInMessage(SocketMessageType.T, inLine.split(" ")[1]));
 					}
 					break;
 				case "S": // Request the current load
-								// TODO implement
+						  // TODO implement
 					if (inLine.split(" ").length > 1) {
 						notifyObservers(new SocketInMessage(SocketMessageType.S, inLine.split(" ")[1]));
 					}

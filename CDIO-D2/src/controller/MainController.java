@@ -4,6 +4,7 @@ import socket.ISocketController;
 import socket.ISocketObserver;
 import socket.SocketInMessage;
 import socket.SocketOutMessage;
+import sun.misc.FloatingDecimal;
 import weight.IWeightInterfaceController;
 import weight.IWeightInterfaceObserver;
 import weight.KeyPress;
@@ -56,11 +57,11 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 		case B:
 			// Sætter brutto på vægt simulator til det givne antal kg.
 			// eks. B 1.234 crlf
-			weightController.showMessagePrimaryDisplay(message.getMessage());
+			notifyWeightChange(FloatingDecimal.parseDouble(message.getMessage().substring(2)));	
 			break;
 		case D:
 			// Max 7 characters is showed onto the display. Virker. (håber vi) Skriver vægt i display.
-			weightController.showMessagePrimaryDisplay(message.getMessage());
+			weightController.showMessagePrimaryDisplay(message.getMessage().substring(0, message.getMessage().length()));
 			break;
 		case Q:
 			// Programmet skal afsluttes.
@@ -72,31 +73,34 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 		case RM208:
 			// Skriv i displayet og afvent indtastning.
 			// Vægten viser en besked til brugeren og afventer brugerens input.
-			// Der sendes en bekræftelse. Når brugerens input er afsluttet sendes dette. 
+			// Der sendes en bekræftelse. Når brugerens input er afsluttet
+			// sendes dette.
 			// NB. Der er 2 svar fra vægten.
 			weightController.showMessagePrimaryDisplay("Afventer indtastning..");
-			socketHandler.sendMessage(new SocketOutMessage("send"));
-			
-			
 			break;
 		case S:
-			// Send stabil afvejning. 
-			socketHandler.sendMessage(new SocketOutMessage("S S      " + (brutto - tara))); // netto
+			// Send stabil afvejning.
+			socketHandler.sendMessage(new SocketOutMessage("S S      " + (this.brutto - this.tara))); // netto
 			break;
 		case T:
 			// Vægt tarares.
-            tara = brutto;
-            weightController.showMessagePrimaryDisplay("0.000kg");
-            socketHandler.sendMessage(new SocketOutMessage("T S      " + tara + " kg" ));
+			this.tara = this.brutto;
+			this.brutto = 0;
+			weightController.showMessagePrimaryDisplay("0.000kg");
+			socketHandler.sendMessage(new SocketOutMessage("T S      " + this.tara + " kg"));
 			break;
 		case DW:
 			// Vægtens display ryddes og vægten svarer med en bekræftelse.
+			this.tara = 0;
+			this.brutto = 0;
 			weightController.showMessagePrimaryDisplay("");
+			socketHandler.sendMessage(new SocketOutMessage("DW A"));
 			break;
 		case K:
-			// K skifter vægtens knap tilstand. Når der trykkes på funktionstaster (tara, zero, [->, send)
+			// K skifter vægtens knap tilstand. Når der trykkes på
+			// funktionstaster (tara, zero, [->, send)
 			// afhænger resultatet af vægtens tilstand.
-			// 
+			//
 			handleKMessage(message);
 			break;
 		case P111:
@@ -159,7 +163,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 	public void notifyWeightChange(double newWeight) {
 		// HOLD STYR PÅ BRUTTO BELASTNING
 		weightController.showMessagePrimaryDisplay("" + newWeight);
-		brutto = newWeight;
+		this.brutto = newWeight;
 	}
 
 }
