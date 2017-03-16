@@ -95,8 +95,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 		case DW:
 			// Vægtens display ryddes og vægten svarer med en bekræftelse.
 			this.tara = 0;
-			this.brutto = 0;
-			weightController.showMessagePrimaryDisplay("");
+			notifyWeightChange(0);
 			socketHandler.sendMessage(new SocketOutMessage("DW A"));
 			break;
 		case K:

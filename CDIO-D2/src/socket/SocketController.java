@@ -99,11 +99,11 @@ public class SocketController implements ISocketController {
 					}
 					break;
 				case "DW": // Clear primary display
-								// TODO implement
+						   // TODO implement
 					notifyObservers(new SocketInMessage(SocketMessageType.DW, ""));
 					break;
 				case "P111": // Show something in secondary display
-									// TODO implement
+							 // TODO implement
 					if (inLine.length() <= 41) {
 						notifyObservers(
 								new SocketInMessage(SocketMessageType.P111, inLine.substring(4, inLine.length() - 1)));
