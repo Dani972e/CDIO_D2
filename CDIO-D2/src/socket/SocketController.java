@@ -39,7 +39,7 @@ public class SocketController implements ISocketController {
 			outWriter.flush();
 			//////////////////////////////////////////////////
 		} else {
-			observers.notify(); // is dis true?
+			//observers.notify(); // is dis true?
 		}
 	}
 

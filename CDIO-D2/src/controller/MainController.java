@@ -148,6 +148,7 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 		case TARA:
 			this.tara = this.brutto;
 			this.brutto = 0;
+			charsPressed = "";
 			weightController.showMessagePrimaryDisplay("0.000kg");
 			socketHandler.sendMessage(new SocketOutMessage("T S      " + this.tara + " kg"));
 			break;
