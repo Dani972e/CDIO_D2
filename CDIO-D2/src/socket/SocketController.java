@@ -88,7 +88,6 @@ public class SocketController implements ISocketController {
 					default:
 						break;
 					}
-
 					break;
 				case "D":
 					// Display a message in the primary display

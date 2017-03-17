@@ -18,6 +18,7 @@ import weight.KeyPress;
  *
  */
 public class MainController implements IMainController, ISocketObserver, IWeightInterfaceObserver {
+	
 	private double brutto, tara;
 	private String charsPressed = "";
 	
@@ -64,13 +65,13 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 		case D:
 			// Max 7 characters is showed onto the display. Skriver vægt i display.
 			weightController.showMessagePrimaryDisplay(message.getMessage().substring(0, message.getMessage().length()));
+			socketHandler.sendMessage(new SocketOutMessage("D A"));
 			break;
 		case Q:
 			// Programmet skal afsluttes.
 			System.exit(0);
 			break;
 		case RM204:
-			
 			break;
 		case RM208:
 			// Skriv i displayet og afvent indtastning.
