@@ -18,12 +18,12 @@ import weight.KeyPress;
  *
  */
 public class MainController implements IMainController, ISocketObserver, IWeightInterfaceObserver {
-
+	private double brutto, tara;
+	private String charsPressed = "";
+	
 	private ISocketController socketHandler;
 	private IWeightInterfaceController weightController;
 	private KeyState keyState = KeyState.K1;
-	private double brutto, tara;
-	private String charsPressed = "";
 	private SocketInMessage.SocketMessageType currentKeyState;
 
 	public MainController(ISocketController socketHandler, IWeightInterfaceController weightInterfaceController) {
@@ -62,16 +62,15 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			notifyWeightChange(FloatingDecimal.parseDouble(message.getMessage() + "kg"));
 			break;
 		case D:
-			// Max 7 characters is showed onto the display. Virker. (håber vi) Skriver vægt i display.
-			weightController
-					.showMessagePrimaryDisplay(message.getMessage().substring(0, message.getMessage().length()));
+			// Max 7 characters is showed onto the display. Skriver vægt i display.
+			weightController.showMessagePrimaryDisplay(message.getMessage().substring(0, message.getMessage().length()));
 			break;
 		case Q:
 			// Programmet skal afsluttes.
 			System.exit(0);
 			break;
 		case RM204:
-			weightController.showMessageSecondaryDisplay(message.getMessage());
+			
 			break;
 		case RM208:
 			// Skriv i displayet og afvent indtastning.
@@ -79,7 +78,6 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			// Der sendes en bekræftelse. Når brugerens input er afsluttet
 			// sendes dette.
 			// NB. Der er 2 svar fra vægten.
-
 			break;
 		case S:
 			// Send stabil afvejning.
@@ -102,18 +100,16 @@ public class MainController implements IMainController, ISocketObserver, IWeight
 			// K skifter vægtens knap tilstand. Når der trykkes på
 			// funktionstaster (tara, zero, [->, send)
 			// afhænger resultatet af vægtens tilstand.
-			//
 			handleKMessage(message);
 			break;
 		case P111:
 			// Skriver max 30 tegn i sekundært display.
-			String P111text = message.getMessage().substring(2, message.getMessage().length());
-			if (P111text.length() > 30) P111text = P111text.substring(0, 30);
-			weightController.showMessageSecondaryDisplay(P111text);
+			String txt = message.getMessage().substring(2, message.getMessage().length());
+			if (txt.length() > 30) txt = txt.substring(0, 30);
+			weightController.showMessageSecondaryDisplay(txt);
 			socketHandler.sendMessage(new SocketOutMessage("P111 A"));
 			break;
 		}
-		// RM204/8
 	}
 
 	private void handleKMessage(SocketInMessage message) {
